@@ -32,7 +32,7 @@ function Header() {
 
                 <SignedOut>
                     <SignInButton mode="modal">
-                        <Button variant="link" className="bg-linear-to-r from-blue-600 to-blue-400 text-transparent bg-clip-text">Sign in</Button>
+                        <Button variant="link"  className="bg-gradient-to-r from-blue-600 to-blue-400 text-transparent bg-clip-text hover:underline hover:decoration-blue-500">Sign in</Button>
                         </SignInButton>
                 </SignedOut>
 
