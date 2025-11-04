@@ -1,4 +1,5 @@
 import AgentPulse from "@/components/AgentPulse";
+import YouTubeVideoForm from "@/components/YouTubeVideoForm";
 import { Brain, Image as ImageIcon, MessageSquare, Sparkles, Video } from "lucide-react";
 
 
@@ -80,8 +81,8 @@ export default function Home() {
             <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
               Transform your video content with AI-powered analysis, transcription, and insights. Get started in seconds!
             </p>
+            <YouTubeVideoForm/>
 
-            
           </div>
         </div>
       </section>
