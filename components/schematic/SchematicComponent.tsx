@@ -1,4 +1,4 @@
-import React from 'react'
+
 import SchematicEmbed from './SchematicEmbed'
 import { getTemporaryAccessToken } from '@/actions/getTemporaryAccessToken'
 
