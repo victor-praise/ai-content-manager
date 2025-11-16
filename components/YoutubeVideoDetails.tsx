@@ -18,7 +18,11 @@ function YoutubeVideoDetails({ videoId }: { videoId: string }) {
     fetchVideoDetails();
  },[videoId]);
 
- if(!video) return <div>Video not found</div>;
+ if(!video) return (
+    <div className="flex justify-center items-center p-4">
+        <div className="w-8 h-8 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+    </div>
+ );
   return (
     <div className="@container bg-white rounded-xl">
         <div className="flex flex-col  gap-8">
