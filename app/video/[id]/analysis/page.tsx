@@ -1,4 +1,7 @@
 'use client';
+import ThumbnailGeneration from '@/components/ThumbnailGeneration';
+import TitleGenerations from '@/components/TitleGenerations';
+import Transcriptions from '@/components/Transcriptions';
 import Usage from '@/components/Usage'
 import YoutubeVideoDetails from '@/components/YoutubeVideoDetails';
 import { FeatureFlag } from '@/features/flags'
@@ -18,9 +21,14 @@ function AnalysisPage() {
         <div className='order-2 lg:order-1 flex flex-col gap-4 bg-white lg:border-r border-gray-200 p-6'>
             <div className='flex flex-col gap-4 border border-gray-200 rounded-xl'>
                 <Usage featureFlag={FeatureFlag.ANALYSE_VIDEO} title='Analyse Video' />
-
             </div>
             <YoutubeVideoDetails videoId ={id} />
+
+            <ThumbnailGeneration videoId={id}  />
+
+            <TitleGenerations videoId={id}  />
+
+            <Transcriptions videoId={id}  />
         </div>
 
 
