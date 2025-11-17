@@ -9,12 +9,15 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^2.0.44",
+    "@ai-sdk/react": "^2.0.93",
     "@clerk/nextjs": "^6.34.0",
     "@radix-ui/react-progress": "^1.1.8",
     "@radix-ui/react-slot": "^1.2.3",
     "@schematichq/schematic-components": "^2.1.1",
     "@schematichq/schematic-react": "^1.2.6",
     "@schematichq/schematic-typescript-node": "^1.2.6",
+    "ai": "^5.0.93",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "convex": "^1.29.1",
@@ -23,7 +26,8 @@
     "next": "16.0.1-canary.2",
     "react": "19.2.0",
     "react-dom": "19.2.0",
-    "tailwind-merge": "^3.3.1"
+    "tailwind-merge": "^3.3.1",
+    "vercel": "^48.10.2"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

@@ -8,7 +8,7 @@ import { Copy } from "lucide-react";
 
 function TitleGenerations({videoId}: {videoId: string}) {
     const {user} = useUser();
-    const titles = [];
+    const titles:{title:String; _id:String}[] = [];
     const {value:isTitleGenerationEnabled} = useSchematicEntitlement(FeatureFlag.TITLE_GENERATION);
 
     const copyToClickboard = (text:string) =>{
@@ -22,7 +22,7 @@ function TitleGenerations({videoId}: {videoId: string}) {
     </div>
 
     <div className="space-y-3 mt-4 max-h-[280px] overflow-y-auto">
-        {titles?.map((title)=>(
+        {/* {titles?.map((title)=>(
             <div key={title._id} className="group relative p-4 rounded-lg border border-gray-100 bg-gray-50 hover:border-blue-100 hover:bg-blue-50 transition-all duration-200">
                    <div className="flex items-start justify-between gap-4">
                     <p className="text-sm text-gray-900 leading-relaxed">{title.title}</p>
@@ -32,7 +32,7 @@ function TitleGenerations({videoId}: {videoId: string}) {
                     </button>
                     </div>                
             </div>
-        ))}
+        ))} */}
     </div>
 
 
