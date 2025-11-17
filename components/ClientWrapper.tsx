@@ -3,6 +3,7 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import { SchematicProvider } from "@schematichq/schematic-react";
 import SchematicWrapped from "./SchematicWrapped";
+import { ConvexClientProvider } from "./ConvexClientProvider";
 
 
 
@@ -19,7 +20,8 @@ export default function ClientWapper({
     throw new Error("Schematic publishable key is not defined");
   }
   return (
-    <ClerkProvider>
+
+    <ConvexClientProvider>
       <SchematicProvider publishableKey = {schematicPubKey}>
         <SchematicWrapped>
           {children}
@@ -27,6 +29,6 @@ export default function ClientWapper({
 
       </SchematicProvider>
       
-    </ClerkProvider>
+    </ConvexClientProvider>
   );
 }
