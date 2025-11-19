@@ -7,7 +7,7 @@ const authConfig =  {
     providers: [
         {
             domain:process.env.CLERK_ISSUE_URL,
-            applicationId:"convex",
+            applicationID:"convex",
         }
     ]
 }
