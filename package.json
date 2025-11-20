@@ -26,6 +26,7 @@
     "next": "16.0.1-canary.2",
     "react": "19.2.0",
     "react-dom": "19.2.0",
+    "react-markdown": "^10.1.0",
     "tailwind-merge": "^3.3.1",
     "vercel": "^48.10.2",
     "youtubei.js": "^16.0.1",
@@ -33,6 +34,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@tailwindcss/typography": "^0.5.19",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

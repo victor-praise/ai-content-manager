@@ -20,11 +20,24 @@ function formatTimeStamp(start_ms:number):string{
 async function fetchTranscript(videoId:string): Promise<TranscriptEntry[]> {
     try {
         const info = await youtube.getInfo(videoId);
+        console.log("i have gotten the info succesfully")
+
+        const captions = info.captions;
+
+if (!captions) {
+  console.log("No captions available for this video");
+  return [];
+}
+
+
         const transcriptData = await info.getTranscript();
         const transcript:TranscriptEntry[] = transcriptData.transcript.content?.body?.initial_segments.map(segment=>({
             text:segment.snippet.text ?? "N/A",
             timestamp: formatTimeStamp(Number(segment.start_ms)),
         })) ?? [];
+
+       
+
 
         return transcript;
     } catch (error) {
@@ -41,6 +54,10 @@ export async function getYoutubeTranscript(videoId:string){
     }
 
     const transcript = await fetchTranscript(videoId);
+    console.log("getYoutubeTranscript: current user", { id: user.id });
+
+    console.log("getYoutubeTranscript: returning transcript", { entries: transcript.length });
+
     return{
         transcript,
         cache:"This was not cached"

@@ -4,6 +4,7 @@ import {useChat} from "@ai-sdk/react";
 import { DefaultChatTransport } from 'ai';
 import { useState } from "react";
 import { Button } from "./ui/button";
+import ReactMarkdown from "react-markdown";
 
 function AIAgentChat({videoId}: {videoId:string}) {
 
@@ -36,10 +37,27 @@ function AIAgentChat({videoId}: {videoId:string}) {
                 )}
 
                 {messages.map((message,index)=> (
-                    <div key={message.id}>
+                    <div key={message.id} className={`flex ${message.role==="user" ? "justify-end" : "justify-start"}`}>
+                        <div className={`max-w-[85%] ${message.role === "user" ? "bg-blue-500" : "bg-gray-100"} rounded-2xl px-4 py-3`}>
+                            {message.role==="assistant" ? (     
+                                <div className="space-y-3"> 
+                                <div className="prose prose-sm max-w-none">
                             {message.parts.map((part, index) =>
-            part.type === 'text' ? <span key={index}>{part.text}</span> : null,
+            part.type === 'text' ? <ReactMarkdown>{part.text}</ReactMarkdown> : part.type==='tool-invocation' ? (
+                <div className="bg-white/50 rounded-lg p-2 space-y-2 text-gray-800">
+
+                </div>
+            ):null
           )}
+          </div>
+          </div>
+        ): (         <div className="prose prose-sm max-w-none text-white">
+                            {message.parts.map((part, index) =>
+            part.type === 'text' ? <ReactMarkdown>{part.text}</ReactMarkdown> : null,
+          )}
+          </div>)}
+               
+          </div>
                     </div>
                 ))}
             </div>
