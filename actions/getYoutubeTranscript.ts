@@ -22,12 +22,7 @@ async function fetchTranscript(videoId:string): Promise<TranscriptEntry[]> {
         const info = await youtube.getInfo(videoId);
         console.log("i have gotten the info succesfully")
 
-        const captions = info.captions;
 
-if (!captions) {
-  console.log("No captions available for this video");
-  return [];
-}
 
 
         const transcriptData = await info.getTranscript();

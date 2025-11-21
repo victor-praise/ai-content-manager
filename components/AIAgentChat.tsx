@@ -6,6 +6,20 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 import ReactMarkdown from "react-markdown";
 
+interface ToolInvocation{
+    toolCallId:string;
+    toolName:string;
+    result?:Record<string,unknown>;
+}
+interface ToolPart{
+    type: "tool-invocation";
+    toolInvocation: ToolInvocation;
+}
+
+const formatToolInvocation = (part: ToolPart) => {
+    if(!part.toolInvocation) return "Unknown Tool";
+    return `Tool Used: ${part.toolInvocation.toolName}`;
+}
 function AIAgentChat({videoId}: {videoId:string}) {
 
     const [input, setInput] = useState('');
@@ -37,23 +51,38 @@ function AIAgentChat({videoId}: {videoId:string}) {
                 )}
 
                 {messages.map((message,index)=> (
+                    
                     <div key={message.id} className={`flex ${message.role==="user" ? "justify-end" : "justify-start"}`}>
+                      
                         <div className={`max-w-[85%] ${message.role === "user" ? "bg-blue-500" : "bg-gray-100"} rounded-2xl px-4 py-3`}>
                             {message.role==="assistant" ? (     
                                 <div className="space-y-3"> 
-                                <div className="prose prose-sm max-w-none">
+                                
                             {message.parts.map((part, index) =>
-            part.type === 'text' ? <ReactMarkdown>{part.text}</ReactMarkdown> : part.type==='tool-invocation' ? (
-                <div className="bg-white/50 rounded-lg p-2 space-y-2 text-gray-800">
-
+                            
+                        
+            part.type === 'text' ? <div key={index} className="prose prose-sm max-w-none"> <ReactMarkdown>{part.text}</ReactMarkdown> </div> : part.type==='tool-fetchTranscript' ? (
+                <div key={index} className="bg-white/50 rounded-lg p-2 space-y-2 text-gray-800">
+                        <div className="font-medium text-xs">
+                            Tool Name: GetTranscript
+                            
+                           
+                        </div>
+                       
+                            <pre className="text-xs bg-white/75 p-2 rounded overflow-auto max-h-40">
+                                {JSON.stringify(
+                                    part.output,null,2
+                                )}
+                            </pre>
+                        
                 </div>
             ):null
           )}
-          </div>
+          
           </div>
         ): (         <div className="prose prose-sm max-w-none text-white">
                             {message.parts.map((part, index) =>
-            part.type === 'text' ? <ReactMarkdown>{part.text}</ReactMarkdown> : null,
+            part.type === 'text' ? <ReactMarkdown key={index}>{part.text}</ReactMarkdown> : null,
           )}
           </div>)}
                
