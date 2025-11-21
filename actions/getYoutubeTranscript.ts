@@ -1,7 +1,13 @@
+
+import { api } from "@/convex/_generated/api";
+import { FeatureFlag, featureFlagEvents } from "@/features/flags";
+import { client } from "@/lib/schematic";
 import { currentUser } from "@clerk/nextjs/server";
+import { ConvexHttpClient } from "convex/browser";
 import {Innertube} from "youtubei.js";
 
 
+const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 export interface TranscriptEntry{
     text:string;
     timestamp:string;
@@ -48,13 +54,46 @@ export async function getYoutubeTranscript(videoId:string){
         throw new Error("User not found");
     }
 
-    const transcript = await fetchTranscript(videoId);
-    console.log("getYoutubeTranscript: current user", { id: user.id });
+    const existingTranscript = await convex.query(
+        api.transcript.getTranscriptByVideoId,{videoId,userId:user.id}
+    )
 
-    console.log("getYoutubeTranscript: returning transcript", { entries: transcript.length });
+    if(existingTranscript){
+        console.log("Transcript exists");
 
-    return{
-        transcript,
-        cache:"This was not cached"
+        return {
+            cache:"The video has already been transcribed - Accessing cached transcript instead of using a token",
+            transcript: existingTranscript.transcript,
+        }
+        
     }
+
+    try {
+         const transcript = await fetchTranscript(videoId);
+
+         await convex.mutation(api.transcript.storeTranscript, {
+            videoId,
+            userId:user.id,
+            transcript
+         })
+
+         await client.track({
+            event: featureFlagEvents[FeatureFlag.TRANSCRIPTION].event,
+            company:{id:user.id},
+            user:{
+                id:user.id,
+            }
+         })
+         return {
+            transcript,
+            cache: "This video was transcribed using a token, the transcript is now saved in the database",
+         };
+    } catch (error) {
+        console.error("Error fetching transcript", error);
+        return{
+            transcript:[],
+            cache:"Error fetching transcript, please try again later"
+        };
+    }
+
 }
