@@ -10,6 +10,7 @@
 
 import type * as images from "../images.js";
 import type * as transcript from "../transcript.js";
+import type * as video from "../video.js";
 
 import type {
   ApiFromModules,
@@ -20,6 +21,7 @@ import type {
 declare const fullApi: ApiFromModules<{
   images: typeof images;
   transcript: typeof transcript;
+  video: typeof video;
 }>;
 
 /**

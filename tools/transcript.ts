@@ -10,8 +10,9 @@ export const fetchTranscript = tool({
     execute:async({videoId}) => {
         const transcript = await getYoutubeTranscript(videoId);
         return {
+            cache:transcript.cache, 
             transcript: transcript.transcript,
-            cache:transcript.cache
+            
         };
     },
 
