@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { convertToModelMessages, streamText, UIMessage } from 'ai';
+import { convertToModelMessages, streamText, UIMessage,stepCountIs } from 'ai';
 
 import { generateText } from "ai"
 import { createAnthropic } from "@ai-sdk/anthropic"
@@ -36,7 +36,8 @@ const model = anthropic("claude-3-5-haiku-20241022");
         messages: convertToModelMessages(messages),
         tools:{
             fetchTranscript:fetchTranscript,
-        }
+        },
+        stopWhen:stepCountIs(5),
 });
 
    

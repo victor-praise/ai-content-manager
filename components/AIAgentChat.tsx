@@ -141,9 +141,14 @@ function AIAgentChat({videoId}: {videoId:string}) {
           value={input}
           onChange={e => setInput(e.target.value)}
           
-          placeholder="Enter a question...."
+          placeholder={isVideoAnalysisEnabled ? "Ask anything about your video..." : "Upgrade to ask anything about your video..."}
         />
-       <Button type="submit" className="px-4 py-2 bg-blue-500 text-white text-sm rounded-full hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" >Send</Button>
+       <Button type="submit" className="px-4 py-2 bg-blue-500 text-white text-sm rounded-full hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" 
+       disabled={status==="streaming" || status==="submitted" || !isVideoAnalysisEnabled}
+       >{
+        status==="streaming"? "AI is replying...": status==="submitted" ? "AI is thinking...":"Send"
+       }
+       </Button>
                 </form>
                 <div className="flex gap-2">
                     <button className="text-xs xl:text-sm w-full flex items-center justify-center gap-2 py-2 px-4 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
