@@ -1,25 +1,15 @@
 "use client";
 
 import {useChat} from "@ai-sdk/react";
-import { DefaultChatTransport } from 'ai';
+import { DefaultChatTransport, UIMessage } from 'ai';
 import { useState } from "react";
 import { Button } from "./ui/button";
 import ReactMarkdown from "react-markdown";
+import { useSchematicFlag } from "@schematichq/schematic-react";
+import { FeatureFlag } from "@/features/flags";
+import { ImageIcon, LetterText, PenIcon } from "lucide-react";
 
-interface ToolInvocation{
-    toolCallId:string;
-    toolName:string;
-    result?:Record<string,unknown>;
-}
-interface ToolPart{
-    type: "tool-invocation";
-    toolInvocation: ToolInvocation;
-}
 
-const formatToolInvocation = (part: ToolPart) => {
-    if(!part.toolInvocation) return "Unknown Tool";
-    return `Tool Used: ${part.toolInvocation.toolName}`;
-}
 function AIAgentChat({videoId}: {videoId:string}) {
 
     const [input, setInput] = useState('');
@@ -30,6 +20,49 @@ function AIAgentChat({videoId}: {videoId:string}) {
             },
         }),
     });
+
+    const isScriptGenerationEnabled = useSchematicFlag(FeatureFlag.SCRIPT_GENERATION);
+    const isImageGenerationEnabled = useSchematicFlag(FeatureFlag.IMAGE_GENERATION);
+    const isTitleGenerationEnabled = useSchematicFlag(FeatureFlag.TITLE_GENERATION);
+    const isVideoAnalysisEnabled = useSchematicFlag(FeatureFlag.ANALYSE_VIDEO);
+
+
+    const generateScript = async () => {
+        const randomId = Math.random().toString(36).substring(2,15);
+
+        const userMessage: UIMessage = {
+            id:`generate-script-${randomId}`,
+            role:"user",
+            parts:[{type:'text', text:"Generate a step-by-step shooting script for this video that i can use on my own channel to produce a video that is similar to this one, don't do any other steps such as generating an image, just generate the script only."}],
+        }
+
+        // setMessages((prev)=>[...prev, userMessage]);
+        sendMessage(userMessage);
+    }
+    const generateImage = async () => {
+        const randomId = Math.random().toString(36).substring(2,15);
+
+        const userMessage: UIMessage = {
+            id:`generate-script-${randomId}`,
+            role:"user",
+            parts:[{type:'text', text:"Generate a thumbnail for this video"}],
+        }
+
+        // setMessages((prev)=>[...prev, userMessage]);
+        sendMessage(userMessage);
+    }
+    const generateTitle = async () => {
+        const randomId = Math.random().toString(36).substring(2,15);
+
+        const userMessage: UIMessage = {
+            id:`generate-script-${randomId}`,
+            role:"user",
+            parts:[{type:'text', text:"Generate a title for this video"}],
+        }
+
+        // setMessages((prev)=>[...prev, userMessage]);
+        sendMessage(userMessage);
+    }
   return (
     <div className="flex flex-col h-full">
         <div className="hidden lg:block px-4 pb-3 border-b border-gray-100">
@@ -112,6 +145,28 @@ function AIAgentChat({videoId}: {videoId:string}) {
         />
        <Button type="submit" className="px-4 py-2 bg-blue-500 text-white text-sm rounded-full hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" >Send</Button>
                 </form>
+                <div className="flex gap-2">
+                    <button className="text-xs xl:text-sm w-full flex items-center justify-center gap-2 py-2 px-4 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    onClick={generateScript} type="button" disabled={!isScriptGenerationEnabled}
+                    >
+                        <LetterText className="w-4 h-4" />
+                        {isScriptGenerationEnabled ? (<span>Generate Script</span>):(<span>Upgrade to generate a script</span>)}
+                    </button>
+                    <button className="text-xs xl:text-sm w-full flex items-center justify-center gap-2 py-2 px-4 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    onClick={generateTitle} type="button" disabled={!isTitleGenerationEnabled}
+                    >
+                        <PenIcon className="w-4 h-4" />
+                       Generate Title
+                    </button>
+                    <button className="text-xs xl:text-sm w-full flex items-center justify-center gap-2 py-2 px-4 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    onClick={generateImage} type="button" disabled={!isImageGenerationEnabled}
+                    >
+                        <ImageIcon className="w-4 h-4" />
+                       Generate Image
+                    </button>
+
+
+                </div>
             </div>
         </div>
     </div>
