@@ -46,7 +46,7 @@ const model = anthropic("claude-3-5-haiku-20241022");
                 }),
                 execute: async({videoId}) => {
                     const videoDetails = await getVideoDetails(videoId);
-                    return videoDetails;
+                    return {videoDetails};
                 }
             })
         },

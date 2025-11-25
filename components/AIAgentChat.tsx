@@ -122,6 +122,19 @@ function AIAgentChat({videoId}: {videoId:string}) {
                                 )}
                             </pre>
                         
+                </div>):part.type==='tool-getVideoDetails' ? (<div key={index} className="bg-white/50 rounded-lg p-2 space-y-2 text-gray-800">
+                        <div className="font-medium text-xs">
+                            Tool Name: getVideoDetails
+                            
+                           
+                        </div>
+                       
+                            <pre className="text-xs bg-white/75 p-2 rounded overflow-auto max-h-40">
+                                {JSON.stringify(
+                                    part.output,null,2
+                                )}
+                            </pre>
+                        
                 </div>):null
           )}
           
