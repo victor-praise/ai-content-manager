@@ -12,6 +12,10 @@ const nextConfig: NextConfig = {
       {
         hostname: 'yt3.ggpht.com',
         protocol: 'https',
+      },
+      {
+        hostname:'little-terrier-335.convex.cloud',
+        protocol:'https',
       }
     ]
   }

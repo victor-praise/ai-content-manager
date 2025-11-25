@@ -1,11 +1,13 @@
 import { NextResponse } from "next/server";
-import { convertToModelMessages, streamText, UIMessage,stepCountIs } from 'ai';
+import { convertToModelMessages, streamText, UIMessage,stepCountIs, tool } from 'ai';
 
 import { generateText } from "ai"
 import { createAnthropic } from "@ai-sdk/anthropic"
 import { currentUser } from "@clerk/nextjs/server";
 import { getVideoDetails } from "@/actions/getVideoDetails";
 import fetchTranscript from "@/tools/transcript";
+import { generateImage } from "@/tools/generateImage";
+import z from "zod";
 
 const anthropic = createAnthropic({
     apiKey: process.env.CLAUDE_API_KEY,
@@ -36,6 +38,17 @@ const model = anthropic("claude-3-5-haiku-20241022");
         messages: convertToModelMessages(messages),
         tools:{
             fetchTranscript:fetchTranscript,
+            generateImage:generateImage(videoId,user.id),
+            getVideoDetails:tool({
+                description:"Get the details of a YouTube video",
+                inputSchema: z.object({
+                    videoId:z.string().describe("The video Id to get the details for"),
+                }),
+                execute: async({videoId}) => {
+                    const videoDetails = await getVideoDetails(videoId);
+                    return videoDetails;
+                }
+            })
         },
         stopWhen:stepCountIs(5),
 });

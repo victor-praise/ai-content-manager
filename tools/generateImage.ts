@@ -1,4 +1,4 @@
-import { dalleImageGeneration } from "@/actions/DalleImageGeneration";
+import { dalleImageGeneration } from "@/actions/dalleImageGeneration";
 import { FeatureFlag } from "@/features/flags";
 import { getConvexClient } from "@/lib/convex";
 import { client } from "@/lib/schematic";
@@ -8,7 +8,7 @@ import { userAgent } from "next/server";
 import {z} from "zod";
 
 
-const IMAGE_SIZE = "1792x1024" as const;
+
 
 
 export const generateImage = (videoId:string,userId:string) => tool({
@@ -29,7 +29,7 @@ export const generateImage = (videoId:string,userId:string) => tool({
     };
 
     const image = await dalleImageGeneration(prompt,videoId);
-    return image;
+    return {image};
    }
 
    
