@@ -4,6 +4,8 @@ import { getConvexClient } from "@/lib/convex";
 import OpenAI from "openai";
 import { currentUser } from "@clerk/nextjs/server";
 import { api } from "@/convex/_generated/api";
+import { client } from "@/lib/schematic";
+import { featureFlagEvents, FeatureFlag } from "@/features/flags";
 
 const convexClient = getConvexClient();
 
@@ -52,6 +54,16 @@ export async function titleGenerations(videoId:string,videoSummary:string,consid
                     userId:user.id,
                     title:title,
                 })
+
+            await client.track({
+            event: featureFlagEvents[FeatureFlag.TITLE_GENERATION].event,
+            company:{id:user.id},
+            user:{
+                id:user.id,
+            }
+         });
+
+         return title;
         }catch(error){
             console.error("Error generating title", error);
             throw new Error("Failed to gnerate title");

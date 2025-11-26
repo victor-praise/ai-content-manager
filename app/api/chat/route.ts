@@ -8,6 +8,7 @@ import { getVideoDetails } from "@/actions/getVideoDetails";
 import fetchTranscript from "@/tools/transcript";
 import { generateImage } from "@/tools/generateImage";
 import z from "zod";
+import generateTitle from "@/tools/generateTitle";
 
 const anthropic = createAnthropic({
     apiKey: process.env.CLAUDE_API_KEY,
@@ -29,7 +30,7 @@ const model = anthropic("claude-3-5-haiku-20241022");
     }
     const videoDetails = await getVideoDetails(videoId);
 
-    const systemMessage = `You are an AI agent ready to accept questions from the user about ONE specific video. the video ID in question is ${videoId} but instead of using the ID, you'll refer to this as ${videoDetails?.title || "Selected Video"}. Use emojis to make the conversation more engaging. If an error occurs, explain it to the user and ask them to try again later. If the error suggest the user upgrade, explain that they must upgrade to use the feature, tell them to go 'Manage Plan' in the header and upgrade. If any tool is used, analyse the response and if it contains a cache, explain that the transcript is cached because they previously transcribed the video saving the user a token - use words like database instead of cache to make it more easy to understand. Format for notion. Whenever the user asks a question that requires getting a transcript, you MUST respond with the transcriptText, it could be the full transcript or just a summary.
+    const systemMessage = `You are an AI agent ready to accept questions from the user about ONE specific video. the video ID in question is ${videoId} but instead of using the ID, you'll refer to this as ${videoDetails?.title || "Selected Video"}. Use emojis to make the conversation more engaging. If an error occurs, explain it to the user and ask them to try again later. If the error suggest the user upgrade, explain that they must upgrade to use the feature, tell them to go 'Manage Plan' in the header and upgrade, also let them know that they can use the default test credit card details. If any tool is used, analyse the response and if it contains a cache, explain that the transcript is cached because they previously transcribed the video saving the user a token - use words like database instead of cache to make it more easy to understand. Format for notion. Whenever the user asks a question that requires getting a transcript, you MUST respond with the transcriptText, it could be the full transcript or just a summary.
 ` 
 
     const result = streamText({
@@ -39,6 +40,7 @@ const model = anthropic("claude-3-5-haiku-20241022");
         tools:{
             fetchTranscript:fetchTranscript,
             generateImage:generateImage(videoId,user.id),
+            generateTitle: generateTitle,
             getVideoDetails:tool({
                 description:"Get the details of a YouTube video",
                 inputSchema: z.object({
@@ -48,7 +50,7 @@ const model = anthropic("claude-3-5-haiku-20241022");
                     const videoDetails = await getVideoDetails(videoId);
                     return {videoDetails};
                 }
-            })
+            }),
         },
         stopWhen:stepCountIs(5),
 });
